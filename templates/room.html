@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mate – {{ room_name }} Room</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>Room: {{ room_name }}</h2>
+    <div id="chat" style="border:1px solid #ccc; height:300px; overflow-y:scroll; padding:5px;"></div>
+
+    <form id="chatForm">
+        <input type="text" id="msg" autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        const socket = io();
+        const room = "{{ room_name }}";
+        const user = "{{ user }}";
+
+        // Join room on load
+        socket.emit('join', {room: room, user: user});
+
+        // Display messages
+        socket.on('message', function(msg) {
+            const chat = document.getElementById("chat");
+            chat.innerHTML += "<p>" + msg + "</p>";
+            chat.scrollTop = chat.scrollHeight;
+        });
+
+        // Send messages
+        document.getElementById("chatForm").onsubmit = function(e) {
+            e.preventDefault();
+            const msg = document.getElementById("msg").value;
+            socket.emit('message', {room: room, msg: msg, user: user});  // ✅ sends dictionary
+            document.getElementById("msg").value = "";
+        };
+    </script>
+</body>
+</html>
+
