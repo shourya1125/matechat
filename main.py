@@ -1,9 +1,9 @@
-ffrom flask import Flask, render_template, request
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, send, join_room
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret!')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 @app.route('/')
